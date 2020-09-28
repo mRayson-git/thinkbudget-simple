@@ -1,0 +1,70 @@
+
+<h2 class="text-success">Parser Profiles - WIP</h2>
+
+<p *ngIf='!parserProfiles || parserProfiles.length === 0'>You have no parsing profiles.</p>
+<div *ngIf='parserProfiles && parserProfiles.length > 0'>
+    <p>Here are your parsing profiles <span class="text-success">(click on them to see details)</span></p>
+    <div class="list-group list-group-flush">
+        <button type="button" *ngFor='let profile of parserProfiles' class="list-group-item list-group-item-action">{{ profile.accountName }}</button>
+    </div>
+</div>
+<div class="card mt-3">
+    <h4 class="card-header">Add a profile</h4>
+    <div class="alert alert-success" *ngIf="message && message.success === true">
+        {{ message.msg }}
+    </div>
+    <div class="alert alert-danger" *ngIf="message && message.success === false">
+        {{ message.msg }}
+    </div>
+    <div class="card-body">
+        <form [formGroup]='parserProfileForm' (ngSubmit)='onSubmit()'>
+            <div class="form-group">
+                <label>Profil Name:</label>
+                <input type="text" class="form-control" placeholder="Ex: ScotiaChecking" formControlName='accountName'>
+            </div>
+            <div class="form-group">
+                <label for="hasHeader">Does it have a header?</label>
+                <select name="hasHeader" id="hasHeader" class="form-control" formControlName='hasHeader'>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="numCols">How many columns are in this file</label>
+                <div class="col-6"><input type="number" name="numCols" id="numCols" placeholder="0" class="form-control" formControlName='numCols'></div>
+            </div>
+            <p>Please list the column index of each field:</p>
+            <div class="row">
+                <div class="col-6">
+                    <label for="amountCol">Amount:</label>
+                    <select name="amountCol" id="amountCol" class="form-control" formControlName="amountCol">
+                        <option *ngFor='let item of [].constructor(parserProfileForm.controls.numCols.value); let i = index'>{{ i }}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="payeeCol">Payee:</label>
+                    <select name="payeeCol" id="payeeCol" class="form-control" formControlName="payeeCol">
+                        <option *ngFor='let item of [].constructor(parserProfileForm.controls.numCols.value); let i = index'>{{ i }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label for="descCol">Description:</label>
+                    <select name="descCol" id="descCol" class="form-control" formControlName="descCol">
+                        <option *ngFor='let item of [].constructor(parserProfileForm.controls.numCols.value); let i = index'>{{ i }}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="dateCol">Date:</label>
+                    <select name="dateCol" id="dateCol" class="form-control" formControlName="dateCol">
+                        <option *ngFor='let item of [].constructor(parserProfileForm.controls.numCols.value); let i = index'>{{ i }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-success" disabled>Submit</button>
+            </div> 
+        </form>
+    </div>
+</div>
