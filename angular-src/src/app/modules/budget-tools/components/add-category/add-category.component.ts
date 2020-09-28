@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { BudgetService } from 'src/app/modules/shared/services/budget.service';
 import { Category } from 'src/app/modules/shared/models/category';
 import { IMessage } from 'src/app/modules/shared/models/imessage';
@@ -16,12 +16,9 @@ export class AddCategoryComponent implements OnInit {
   category: Category;
   message: IMessage;
 
-  categoryForm = new FormGroup({
-    catType: new FormControl(''),
-    catName: new FormControl('')
-  });
+  categoryForm: FormGroup;
 
-  constructor(private budgetService: BudgetService) { 
+  constructor(private budgetService: BudgetService, private fb: FormBuilder) { 
     this.types = [
       'Choose a Type',
       'Daily',
@@ -31,6 +28,11 @@ export class AddCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.categoryForm = this.fb.group({
+      //In the form builder the first element is the default value, the second is for validators
+      catType: ['',Validators.required],
+      catName: ['']
+    });
   }
 
   getFormValue(value: string) {

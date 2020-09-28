@@ -1,14 +1,32 @@
-<div class="container">
-    <div class="card">
+<div class="container mt-3">
+    <div class="card shadow">
         <h1 class="card-header text-center">Signup</h1>
         <div class="card-body">
-            <form>
-                <input type="text" name="username" id="username" placeholder="Username" class="form-control mb-2">
-                <input type="email" name="email" id="email" placeholder="Email" class="form-control mb-2">
-                <input type="password" name="password" id="password" placeholder="Password" class="form-control mb-2">
-                <input type="password" name="cpassword" id="cpassword" placeholder="Confirm password" class="form-control mb-2">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <form [formGroup]="signupForm">
+                <input type="text" name="username" id="username" placeholder="Username" class="form-control mb-2"
+                formControlName="username"
+                [ngClass]="{'is-invalid':(signupForm.get('username').touched || signupForm.get('username').dirty) && !signupForm.get('username').valid }">
+                
+                <input type="email" name="email" id="email" placeholder="Email" class="form-control mb-2"
+                formControlName="email"
+                [ngClass]="{'is-invalid':(signupForm.get('email').touched || signupForm.get('email').dirty) && !signupForm.get('email').valid }">
+                
+                <input type="password" name="password" id="password" placeholder="Password" class="form-control mb-2"
+                formControlName="password"
+                [ngClass]="{'is-invalid':(signupForm.get('password').touched || signupForm.get('password').dirty) && !signupForm.get('password').valid }">
+                
+                <input type="password" name="cpassword" id="cpassword" placeholder="Confirm password" class="form-control mb-2"
+                formControlName="cpassword"
+                [ngClass]="{'is-invalid':(signupForm.get('cpassword').touched || signupForm.get('cpassword').dirty) && !signupForm.get('cpassword').valid }">
+                
+                <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid">Submit</button>
             </form>
+            <div class="alert alert-info mt-3">
+                Dirty: {{ signupForm.dirty }} 
+                <br>Touched: {{ signupForm.touched }}
+                <br>Valid: {{ signupForm.valid }}
+                <br>Value: {{ signupForm.value | json }}
+            </div>
         </div>
     </div>
 </div>
