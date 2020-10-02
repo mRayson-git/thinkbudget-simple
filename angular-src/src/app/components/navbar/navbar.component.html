@@ -6,10 +6,10 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link btn" routerLink="homepage">Home</a>
+        <a class="nav-link" routerLink="homepage">Home</a>
       </li>
       <li class="nav-item" *ngIf="!auth.authenticated">
-        <a class="nav-link btn" (click)="signIn()">Sign In</a>
+        <button type="button" class="nav-link btn" (click)="signIn()">Sign In</button>
       </li>
       <li class="nav-item dropdown" *ngIf="auth.authenticated">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -17,8 +17,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Acount Settings - WIP</a>
-          <a class="dropdown-item" href="#">My Budgets - WIP</a>
-          <a class="dropdown-item btn" (click)="signOut()">Sign Out</a>
+          <a class="dropdown-item" routerLink="budgetcreation">My Budgets - WIP</a>
+          <a class="dropdown-item" (click)="signOut()">Sign Out</a>
         </div>
       </li>
     </ul>
