@@ -1,4 +1,4 @@
 export interface Category {
-    userEmail: string,
-    categoryName: string
+    categoryName: string,
+    categoryAmount: number
 }

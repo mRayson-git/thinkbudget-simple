@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const passport = require('passport');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+// const passport = require('passport');
+// const cookieParser = require('cookie-parser');
+// const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -22,8 +22,8 @@ mongoose.connect('mongodb://localhost:27017/ThinkBudget-Simple', (err) => {
 
 //Initializing middleware
 app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(session({ secret: 'thinkbudget' }));
+// app.use(cookieParser());
+// app.use(session({ secret: 'thinkbudget' }));
 
 //Passport stuff
 //require('./config/passport.js')(app);
@@ -32,9 +32,8 @@ app.use(session({ secret: 'thinkbudget' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Set routes
-app.use('/api/categoryBudgets', require('./routes/api/categoryBudgets'));
+app.use('/api/budgets', require('./routes/api/budgets'));
 app.use('/api/transactions', require('./routes/api/transactions'));
-app.use('/api/categories', require('./routes/api/categories'));
 
 //Start server listening
 app.listen(3000, () => {

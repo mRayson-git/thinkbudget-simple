@@ -1,8 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
-import { getMaxListeners } from 'process';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'; 
+import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
+import { Message } from 'src/app/models/message';
 import { AuthService } from 'src/app/services/auth.service';
+import { BudgetService } from 'src/app/services/budget.service';
+
+function uniqueCategory(list: string[]): ValidatorFn {
+  return (c: AbstractControl): { [key: string]: any } | null => {
+    let notUnique = false;
+    list.forEach(category => {
+      if (c.value === category){
+        notUnique = true;
+      }
+    });
+    return notUnique ? {notUnique: {value: c.value}} : null;
+  }
+}
 
 @Component({
   selector: 'app-budgetcreation',
@@ -10,38 +24,119 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./budgetcreation.component.scss']
 })
 export class BudgetcreationComponent implements OnInit {
-  categoryForm: FormGroup;
-  budgetForm: FormGroup;
-
+  knownCategoryForm: FormGroup;
+  customCategoryForm: FormGroup;
+  budget: Budget;
   categories: Category[];
+  knownCategories: string[];
+  message: Message;
 
-  constructor(private formBuilder: FormBuilder, public auth: AuthService) { }
+  constructor(private formBuilder: FormBuilder, public auth: AuthService, private budgetService: BudgetService) { }
 
   ngOnInit(): void {
-    this.categoryForm = this.formBuilder.group({
-      categoryName: ['', Validators.required]
+    this.categories = [];
+    this.knownCategories = [
+      "Rent",
+      "Groceries",
+      "Entertainment",
+      "Outings",
+      "Education"
+    ]
+    this.knownCategoryForm = this.formBuilder.group({
+      categoryName: ['', Validators.required],
+      categoryAmount: ['', Validators.required]
     });
-    this.budgetForm = this.formBuilder.group({
-      budgetDate: ['',Validators.required],
-      budgetAmount: ['', Validators.required],
-      budgetCategory: ['',Validators.required]
+
+    this.customCategoryForm = this.formBuilder.group({
+      categoryName: ['', [Validators.required, uniqueCategory(this.knownCategories)]],
+      categoryAmount: ['', Validators.required]
     });
-    this.categories = [{
+
+    this.getBudget();
+    this.knownCategories.sort();
+    this.sortCategories(this.categories);
+  }
+
+  // Submit Functions
+  addKnownCategory() {
+    let category: Category = {
+      categoryName: this.knownCategoryForm.get('categoryName').value,
+      categoryAmount: this.knownCategoryForm.get('categoryAmount').value
+    }
+    this.categories.push(category);
+    this.knownCategoryForm.reset();
+  }
+  addCustomCategory(){
+    let category: Category = {
+      categoryName: this.customCategoryForm.get('categoryName').value,
+      categoryAmount: this.customCategoryForm.get('categoryAmount').value
+    }
+    this.knownCategories.push(category.categoryName);
+    this.categories.push(category);
+    //console.log(this.categories);
+    this.customCategoryForm.reset();
+  }
+
+  getBudget() {
+    this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(budget => {
+      this.budget = budget;
+      this.updateInformation(this.budget);
+    })
+  }
+
+  // Adding budget to database
+  updateBudget() {
+    let budget: Budget = {
       userEmail: "mrayson5129@gmail.com",
-      categoryName: "Groceries"
-    }]
+      budgetCategories: this.categories
+    }
+    this.budgetService.updateBudget(budget).subscribe(data => {
+      if (data) {
+        this.updateInformation(budget);
+        this.message = {
+          success: true,
+          msg: "Budget has been saved"
+        }
+        setTimeout(() => this.message = undefined, 3000);
+      } else {
+        this.message = {
+          success: false,
+          msg: "Budget has not been saved"
+        }
+        setTimeout(() => this.message = undefined, 3000);
+      }
+    });
   }
 
-  categorySubmit(){
-    console.log(this.categoryForm.get('categoryName').errors);
-    console.log(this.categoryForm.valid);
-    console.log({ userEmail: this.auth.user.email, categoryName: this.categoryForm.get('categoryName').value });
-    this.categoryForm.reset();
+
+  isInvalidKnownCategory(field: string): boolean {
+    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && !this.knownCategoryForm.get(field).valid;
+  }
+  isInvalidCategory(field: string): boolean {
+    return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && !this.customCategoryForm.get(field).valid;
   }
 
-  budgetSubmit() {
-    console.log({ userEmail: this.auth.user.email, budgetForm: this.budgetForm.value });
-    this.budgetForm.reset();
+  //Helper function
+  updateInformation(budget: Budget) {
+    this.categories = [];
+    budget.budgetCategories.forEach((category) => {
+      if (this.knownCategories.indexOf(category.categoryName) === -1) {
+        this.knownCategories.push(category.categoryName);
+      }
+      this.categories.push(category);
+    });
+    this.knownCategories.sort();
+    this.sortCategories(this.categories);
+  }
+
+  removeCategory(categoryName: string) {
+    this.categories = this.categories.filter((category) => {return category.categoryName !== categoryName});
+  }
+
+  sortCategories(categories: Category[]){
+    categories.sort((first, second) => {
+      return first.categoryName > second.categoryName? 1 : -1;
+    });
   }
 
 }

@@ -6,6 +6,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { MsalModule } from '@azure/msal-angular';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { BudgetcreationComponent } from './components/budgetcreation/budgetcreat
     ReactiveFormsModule,
     NgbModule,
     FontAwesomeModule,
+    HttpClientModule,
     MsalModule.forRoot({
       auth: {
         clientId: OAuthSettings.appId

@@ -1,74 +1,112 @@
 <div class="card shadow">
   <div class="card-header">
-    <h1 class="text-success">Category Manager</h1>
-  </div>
-  <div class="card-body">
-    <!-- Help text -->
-    <p>Here is where you can create the categories that you want to use in your budget.</p>
-    <form [formGroup]="categoryForm" (ngSubmit)="categorySubmit()">
-      <div class="form-group">
-        <label for="categoryName" class="text-success">Category Name</label>
-        <input type="text" class="form-control col-sm-12 col-md-6" placeholder="Groceries..." formControlName="categoryName"
-        [ngClass]="{'is-invalid': (categoryForm.get('categoryName').touched || categoryForm.get('categoryName').dirty) && !categoryForm.get('categoryName').valid}">
-        <span *ngIf="categoryForm.get('categoryName').errors" class="invalid-feedback">Required.</span>
-      </div>
-      <div class="form-group">
-        <div class="form-row">
-          <div class="col-sm-12 col-md-3">
-            <button type="submit" class="btn btn-sm btn-success form-control" [disabled]="!categoryForm.valid" 
-            [title]="categoryForm.valid ? 'Save data' : 'Form must be valid'">Save</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-<hr class="my-3">
-<div class="card shadow">
-  <div class="card-header">
     <h1 class="text-success">Budget Creator</h1>
   </div>
   <div class="card-body">
     <!-- Help text -->
-    <p>Here is where you actually create your budgets</p>
-    <form [formGroup]="budgetForm" (ngSubmit)="budgetSubmit()">
-      <div class="form-row">
-        <div class="col-sm-12 col-lg-6">
-          <div class="form-group">
-            <input type="date" class="form-control" formControlName="budgetDate" placeholder="04/02/1999"
-            [ngClass]="{'is-invalid': (budgetForm.get('budgetDate').touched || budgetForm.get('budgetDate').dirty) && !budgetForm.get('budgetDate').valid}">
-            <span *ngIf="budgetForm.get('budgetDate').errors" class="invalid-feedback">Required.</span>
-          </div>
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">$</span>
-              </div>
-              <input type="number" class="form-control" formControlName="budgetAmount"
-              [ngClass]="{'is-invalid': (budgetForm.get('budgetAmount').touched || budgetForm.get('budgetAmount').dirty) && !budgetForm.get('budgetAmount').valid}">
-              <div class="input-group-append">
-                <span class="input-group-text">.00</span>
-              </div>
-              <span *ngIf="budgetForm.get('budgetAmount').errors" class="invalid-feedback">Required.</span>
+    <div *ngIf="message">
+      <div class="alert alert-success" *ngIf="message.success">
+        {{ message.msg }}
+      </div>
+      <div class="alert alert-danger" *ngIf="!message.success">
+        {{ message.msg }}
+      </div>
+    </div>
+    <div class="row">
+      <!-- Form -->
+      <div class="col-sm-12 col-md-6">
+        <h5>Use a known category</h5>
+        <!-- Use known categories -->
+        <form [formGroup]="knownCategoryForm" (ngSubmit)="addKnownCategory()">
+          <div class="form-row">
+            <!-- Category Name Drop Down -->
+            <div class="col-5">
+              <select class="form-control" formControlName="categoryName" [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryName') }">
+                <option *ngFor="let category of knownCategories">{{ category }}</option>
+              </select>
+              <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
+                Required.
+              </span>
+            </div>
+            <!-- Category Amount -->
+            <div class="col-3">
+              <input type="number" class="form-control" formControlName="categoryAmount" placeholder="0.00" [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryAmount') }">
+              <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
+                Required.
+              </span>
+            </div>
+            <!-- Submit Button -->
+            <div class="col-sm-12 mt-sm-3 col-md-4 mt-md-0">
+              <button type="submit" class="btn btn-success" [disabled]="!knownCategoryForm.valid">Add Category</button>
             </div>
           </div>
-          <div class="form-group">
-            <select class="form-control" formControlName="budgetCategory"
-            [ngClass]="{'is-invalid': (budgetForm.get('budgetCategory').touched || budgetForm.get('budgetCategory').dirty) && !budgetForm.get('budgetCategory').valid}">
-                <option value="">Choose a Category</option>
-                <option *ngFor="let category of categories">{{ category.categoryName }}</option>
-            </select>
-            <span *ngIf="budgetForm.get('budgetCategory').errors" class="invalid-feedback">Required.</span>
+        </form>
+        <hr class="my-3">
+        <h5>Create your own category</h5>
+        
+        <!-- Add a new category -->
+        <form [formGroup]="customCategoryForm" (ngSubmit)="addCustomCategory()">
+          <div class="form-row">
+            <div class="col-5">
+              <input type="text" class="form-control" id="categoryName" placeholder="Groceries" formControlName="categoryName"
+              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryName') }">
+              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.notUnique">
+                Must be unique.
+              </span>
+              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.required">
+                Required.
+              </span>
+            </div>
+            <div class="col-3">
+              <input type="number" class="form-control" id="categoryAmount" formControlName="categoryAmount"
+              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryAmount') }" placeholder="0.00">
+              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryAmount').errors">
+                Required.
+              </span>
+            </div>
+            <div class="col-sm-12 mt-sm-3 col-md-4 mt-md-0">
+              <button type="submit" class="btn btn-success" [disabled]="!customCategoryForm.valid">Add Category</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+      <!-- Current Budget Display -->
+      <div class="col mt-3" *ngIf="categories && categories.length !== 0; else helpMessage">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h4 class="text-success">Your Budget's Categories </h4>
+            <button type="button" class="btn btn-success" (click)="updateBudget()">Save / Update</button>
+          </div>
+          <div class="card-body">
+            <!-- Table -->
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Category Name</th>
+                  <th>Budgeted Amount</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let category of categories">
+                  <td>{{ category.categoryName }}</td>
+                  <td>{{ category.categoryAmount | currency }}</td>
+                  <td><button type="button" class="btn btn-danger" (click)="removeCategory(category.categoryName)">Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <div class="form-row">
-          <div class="col-sm-12 col-md-3">
-            <button type="submit" class="btn btn-sm btn-success form-control" [disabled]="!budgetForm.valid">Save</button>
+      <ng-template #helpMessage>
+        <div class="col mt-3">
+          <div class="alert alert-warning">
+            Fill out the budget form and a visual of it will display here.
           </div>
         </div>
-      </div>
-    </form>
+      </ng-template>
+    </div>
   </div>
 </div>

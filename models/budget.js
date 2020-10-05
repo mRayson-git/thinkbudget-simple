@@ -2,23 +2,27 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const BudgetSchema = schema({
-    date: { type: String, required: true },
-    categoryName: { type: String, required: true },
-    amount: { type: Number, required: true }
+    userEmail: {type: String, required: true},
+    budgetCategories: {type: [], required: true }
 });
 
 const Budget = module.exports = mongoose.model("Budget", BudgetSchema);
-
+//GET request
 module.exports.getBudgets = function (callback, limit){
     Budget.find(callback).limit(limit);
 }
 
+module.exports.getBudgetByName = function(userEmail, callback) {
+    Budget.findOne({ 'userEmail': userEmail }, callback);
+}
+
+//POST request
 module.exports.addBudget = function(budget, callback) {
     console.log(budget);
     Budget.create(budget, callback);
 }
 
-module.exports.getBudgetsByTimeFrame = function (year, month, callback){
-    console.log(year + '-' + month)
-    Budget.find({"date": { "$regex": year + '-' + month }  }, callback);
+//PUT request
+module.exports.updateBudget = function(userEmail, budget, callback) {
+    Budget.updateOne({"userEmail": userEmail}, budget, callback);
 }

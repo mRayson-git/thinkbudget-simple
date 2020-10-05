@@ -13,19 +13,8 @@ router.get('/', (req, res) => {
         }
     });
 });
-
-router.post('/', (req, res) => {
-    budget.addBudget(req.body, (err, result) => {
-        if (err) {
-            res.json({ success: false, msg: 'Could not save budget, missing values?' });
-        } else {
-            res.json({ success: true, msg: 'Budget successfully added' });
-        }
-    });
-});
-
-router.get('/:year', (req, res) => {
-    budget.getBudgetsByTimeFrame(req.params.year, req.query.month, (err, result) => {
+router.get('/:userEmail', (req, res) => {
+    budget.getBudgetByName(req.params.userEmail, (err, result) => {
         if (err) {
             throw err;
         } else {
@@ -33,5 +22,27 @@ router.get('/:year', (req, res) => {
         }
     });
 });
+
+router.post('/', (req, res) => {
+    budget.addBudget(req.body, (err, budget) => {
+        if (err) {
+            res.json({ success: false, msg: 'Could not save budget, missing values?' });
+        } else {
+            res.json(budget);
+        }
+    });
+});
+
+router.put('/', (req, res) => {
+    budget.updateBudget(req.body.userEmail, req.body, (err, budget) => {
+        if (err) {
+            throw err;
+        } else {
+            res.json(budget);
+        }
+    });
+});
+
+
 
 module.exports = router;
