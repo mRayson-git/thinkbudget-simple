@@ -10,6 +10,7 @@ import { BudgetcreationComponent } from './components/budgetcreation/budgetcreat
 
 import { AuthModule } from '@auth0/auth0-angular';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     NavbarComponent,
     HomepageComponent,
     BudgetcreationComponent,
-    DashboardComponent
+    DashboardComponent,
+    TransactionFormComponent
   ],
   imports: [
     BrowserModule,

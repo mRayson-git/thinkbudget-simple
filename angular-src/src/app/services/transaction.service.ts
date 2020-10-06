@@ -1,0 +1,16 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Transaction } from '../models/transaction';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TransactionService {
+  transactionUrl="http://localhost:3000/api/transactions/";
+  constructor(private http: HttpClient) { }
+
+  saveTransaction(transaction: Transaction): Observable<Transaction>{
+    return this.http.post<Transaction>(this.transactionUrl, transaction);
+  }
+}
