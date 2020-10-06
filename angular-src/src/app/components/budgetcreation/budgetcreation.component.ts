@@ -46,7 +46,6 @@ export class BudgetcreationComponent implements OnInit {
       categoryName: ['', Validators.required],
       categoryAmount: ['', Validators.required]
     });
-
     this.customCategoryForm = this.formBuilder.group({
       categoryName: ['', [Validators.required, uniqueCategory(this.knownCategories)]],
       categoryAmount: ['', Validators.required]
@@ -81,12 +80,16 @@ export class BudgetcreationComponent implements OnInit {
   }
 
   getBudget() {
-    this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(budget => {
-      if (budget !== null){
-        this.budget = budget;
-        this.updateInformation(this.budget);
-      }
-    });
+    this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(
+      budget => {
+        if (budget !== null){
+          this.budget = budget;
+          this.updateInformation(this.budget);
+        }
+      },
+      err => console.log(err),
+      () => console.log('Budget has been retrieved')
+    );
   }
 
   // Adding budget to database
