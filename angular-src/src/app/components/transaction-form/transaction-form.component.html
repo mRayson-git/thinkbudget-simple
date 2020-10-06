@@ -28,6 +28,7 @@
                         <label>Category</label>
                         <select class="form-control" formControlName="transactionCategory">
                             <option value="">Choose a category</option>
+                            <option *ngFor="let category of knownCategories">{{ category.categoryName }}</option>
                         </select>
                     </div>
                 </div>
@@ -36,5 +37,30 @@
                 <button type="submit" class="btn btn-success">Submit</button>
             </div>
         </form>
+    </div>
+</div>
+<hr class="my-3">
+<!-- Transaction History Card -->
+<div class="card shadow">
+    <div class="card-header">
+        <h1 class="text-success">Transaction History</h1>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let transaction of pastTransactions">
+                <td class="align-middle">{{ transaction.transactionDate | date }}</td>
+                <td class="align-middle">{{ transaction.transactionAmount | currency }}</td>
+                <td class="align-middle">{{ transaction.transactionCategory }}</td>
+              </tr>
+            </tbody>
+          </table>
     </div>
 </div>

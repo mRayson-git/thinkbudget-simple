@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '@auth0/auth0-angular';
+import { Observable } from 'rxjs';
+import { Category } from 'src/app/models/category';
 import { Transaction } from 'src/app/models/transaction';
+import { Budget } from 'src/app/models/budget';
+import { BudgetService } from 'src/app/services/budget.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
@@ -10,7 +15,15 @@ import { TransactionService } from 'src/app/services/transaction.service';
 })
 export class TransactionFormComponent implements OnInit {
   transactionForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private transactionService: TransactionService) { }
+  knownCategories: Category[];
+  pastTransactions: Transaction[];
+
+  userEmail: string;
+  constructor(
+    private formBuilder: FormBuilder, 
+    private transactionService: TransactionService,
+    private budgetService: BudgetService,
+    public auth: AuthService) { }
 
   ngOnInit(): void {
     this.transactionForm = this.formBuilder.group({
@@ -18,16 +31,43 @@ export class TransactionFormComponent implements OnInit {
       transactionAmount: ['', Validators.required],
       transactionCategory: ['', Validators.required]
     });
+    this.auth.user$.subscribe(user => {
+      this.userEmail = user.email;
+      this.getCategories(user.email).subscribe(budget => {
+        this.knownCategories = budget.budgetCategories;
+      });
+      this.getTransactions(user.email);
+    });
+  
   }
 
   transactionSubmit(){
     let transaction: Transaction = {
+      userEmail: this.userEmail,
       transactionDate: this.transactionForm.get('transactionDate').value,
       transactionAmount: this.transactionForm.get('transactionAmount').value,
       transactionCategory: this.transactionForm.get('transactionCategory').value
     }
-    console.log(this.transactionForm.value);
+    this.transactionService.saveTransaction(transaction).subscribe(transaction => {
+      if (transaction) {
+        console.log(transaction);
+      } else {
+        console.error('failure');
+      }
+    });
+    this.getTransactions(this.userEmail);
     this.transactionForm.reset();
+  }
+
+  // Pulls the current budget information (containing the categories)
+  getCategories(userEmail: string): Observable<Budget> {
+    return this.budgetService.getBudgetByName(userEmail);
+  }
+
+  getTransactions(userEmail: string) {
+    this.transactionService.getTransactions(userEmail).subscribe(data => {
+      this.pastTransactions = data;
+    });
   }
 
 }

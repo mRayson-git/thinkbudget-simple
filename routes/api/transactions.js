@@ -3,18 +3,20 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const transaction = require('../../models/transaction');
 
-//Return a json array of all the category budgets set
-router.get('/', (req, res) => {
+// GET
+router.get('/:userEmail', (req, res) => {
     console.log('transaction API hit');
-    transaction.getTransactions((err, result) => {
-        if(err) {
-            res.json({ success: false, msg:'Could not retrieve budgets' });
-        } else {
-            res.json({ success: true, msg: result });
+    transaction.getTransactions(req.params.userEmail, (err, transactions) => {
+        if (err) throw err;
+        else {
+            res.json(transactions);
         }
     });
 });
 
+
+
+// POST
 router.post('/', (req, res) => {
     console.log(req.body);
     transaction.addTransaction(req.body, (err, result) => {
