@@ -9,13 +9,15 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { BudgetcreationComponent } from './components/budgetcreation/budgetcreation.component';
 
 import { AuthModule } from '@auth0/auth0-angular';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomepageComponent,
-    BudgetcreationComponent
+    BudgetcreationComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

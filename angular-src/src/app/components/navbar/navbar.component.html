@@ -8,19 +8,21 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="homepage">Home</a>
       </li>
-      <li class="nav-item">
-        <button type="button" class="nav-link btn">Sign In</button>
-      </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" *ngIf="auth.isAuthenticated$ | async; else signIn">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Acount Settings - WIP</a>
-          <a class="dropdown-item" routerLink="budgetcreation">My Budgets - WIP</a>
-          <a class="dropdown-item">Sign Out</a>
+          <a class="dropdown-item" routerLink="budgetcreation">My Budget</a>
+          <a class="dropdown-item" (click)="auth.logout()">Sign Out</a>
         </div>
       </li>
+      <ng-template #signIn>
+        <li class="nav-item">
+          <button type="button" class="nav-link btn" (click)="auth.loginWithRedirect()">Sign In</button>
+        </li>
+      </ng-template>
     </ul>
   </div>
 </nav>
