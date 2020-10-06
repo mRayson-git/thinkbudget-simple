@@ -24,9 +24,10 @@ router.get('/:userEmail', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    console.log(req.body);
     budget.addBudget(req.body, (err, budget) => {
         if (err) {
-            res.json({ success: false, msg: 'Could not save budget, missing values?' });
+            throw err;
         } else {
             res.json(budget);
         }
@@ -34,6 +35,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/', (req, res) => {
+    console.log(req.body);
     budget.updateBudget(req.body.userEmail, req.body, (err, budget) => {
         if (err) {
             throw err;

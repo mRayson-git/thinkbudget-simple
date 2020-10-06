@@ -63,7 +63,10 @@ export class BudgetcreationComponent implements OnInit {
       categoryName: this.knownCategoryForm.get('categoryName').value,
       categoryAmount: this.knownCategoryForm.get('categoryAmount').value
     }
+    //check to see if it has already been added
+    this.removeCategory(category.categoryName);
     this.categories.push(category);
+    this.sortCategories(this.categories);
     this.knownCategoryForm.reset();
   }
   addCustomCategory(){
@@ -79,9 +82,11 @@ export class BudgetcreationComponent implements OnInit {
 
   getBudget() {
     this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(budget => {
-      this.budget = budget;
-      this.updateInformation(this.budget);
-    })
+      if (budget !== null){
+        this.budget = budget;
+        this.updateInformation(this.budget);
+      }
+    });
   }
 
   // Adding budget to database
@@ -90,20 +95,30 @@ export class BudgetcreationComponent implements OnInit {
       userEmail: "mrayson5129@gmail.com",
       budgetCategories: this.categories
     }
-    this.budgetService.updateBudget(budget).subscribe(data => {
-      if (data) {
-        this.updateInformation(budget);
-        this.message = {
-          success: true,
-          msg: "Budget has been saved"
-        }
-        setTimeout(() => this.message = undefined, 3000);
+    this.budgetService.getBudgetByName(budget.userEmail).subscribe(response => {
+      if(response === null) {
+        this.budgetService.saveBudget(budget).subscribe(data => {
+          if (data !== null) {
+            this.updateInformation(budget);
+          }
+        });
       } else {
-        this.message = {
-          success: false,
-          msg: "Budget has not been saved"
-        }
-        setTimeout(() => this.message = undefined, 3000);
+        this.budgetService.updateBudget(budget).subscribe(data => {
+          if (data) {
+            this.updateInformation(budget);
+            this.message = {
+              success: true,
+              msg: "Budget has been saved"
+            }
+            setTimeout(() => this.message = undefined, 3000);
+          } else {
+            this.message = {
+              success: false,
+              msg: "Budget has not been saved"
+            }
+            setTimeout(() => this.message = undefined, 3000);
+          }
+        });
       }
     });
   }
