@@ -21,7 +21,9 @@
           <div class="form-row">
             <!-- Category Name Drop Down -->
             <div class="col-5">
-              <select class="form-control" formControlName="categoryName" [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryName') }">
+              <select class="form-control" formControlName="categoryName" 
+              [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryName'), 'is-valid': isValidKnownCategory('categoryName') }">
+                <option value='' class="text-muted">Choose a Category</option>
                 <option *ngFor="let category of knownCategories">{{ category }}</option>
               </select>
               <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
@@ -30,7 +32,8 @@
             </div>
             <!-- Category Amount -->
             <div class="col-3">
-              <input type="number" class="form-control" formControlName="categoryAmount" placeholder="0.00" [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryAmount') }">
+              <input type="number" class="form-control" formControlName="categoryAmount" placeholder="0.00" 
+              [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryAmount'), 'is-valid': isValidKnownCategory('categoryAmount') }">
               <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
                 Required.
               </span>
@@ -48,8 +51,8 @@
         <form [formGroup]="customCategoryForm" (ngSubmit)="addCustomCategory()">
           <div class="form-row">
             <div class="col-5">
-              <input type="text" class="form-control" id="categoryName" placeholder="Groceries" formControlName="categoryName"
-              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryName') }">
+              <input type="text" class="form-control" id="categoryName" placeholder="Category name" formControlName="categoryName"
+              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryName'), 'is-valid': isValidCategory('categoryName') }">
               <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.notUnique">
                 Must be unique.
               </span>
@@ -59,7 +62,7 @@
             </div>
             <div class="col-3">
               <input type="number" class="form-control" id="categoryAmount" formControlName="categoryAmount"
-              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryAmount') }" placeholder="0.00">
+              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryAmount'), 'is-valid': isValidCategory('categoryAmount') }" placeholder="0.00">
               <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryAmount').errors">
                 Required.
               </span>

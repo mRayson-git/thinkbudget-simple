@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { Message } from 'src/app/models/message';
-import { AuthService } from 'src/app/services/auth.service';
 import { BudgetService } from 'src/app/services/budget.service';
 
 function uniqueCategory(list: string[]): ValidatorFn {
@@ -31,7 +30,7 @@ export class BudgetcreationComponent implements OnInit {
   knownCategories: string[];
   message: Message;
 
-  constructor(private formBuilder: FormBuilder, public auth: AuthService, private budgetService: BudgetService) { }
+  constructor(private formBuilder: FormBuilder, private budgetService: BudgetService) { }
 
   ngOnInit(): void {
     this.categories = [];
@@ -66,7 +65,10 @@ export class BudgetcreationComponent implements OnInit {
     this.removeCategory(category.categoryName);
     this.categories.push(category);
     this.sortCategories(this.categories);
-    this.knownCategoryForm.reset();
+    this.knownCategoryForm.reset({
+      categoryName: '',
+      categoryAmount: null
+    });
   }
   addCustomCategory(){
     let category: Category = {
@@ -126,12 +128,17 @@ export class BudgetcreationComponent implements OnInit {
     });
   }
 
-
   isInvalidKnownCategory(field: string): boolean {
-    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && !this.knownCategoryForm.get(field).valid;
+    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && !this.knownCategoryForm.get(field).valid? true : false;
+  }
+  isValidKnownCategory(field: string): boolean {
+    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && this.knownCategoryForm.get(field).valid? true : false;
   }
   isInvalidCategory(field: string): boolean {
     return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && !this.customCategoryForm.get(field).valid;
+  }
+  isValidCategory(field: string): boolean {
+    return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && this.customCategoryForm.get(field).valid;
   }
 
   //Helper function

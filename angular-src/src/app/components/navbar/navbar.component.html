@@ -8,8 +8,8 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="homepage">Home</a>
       </li>
-      <li class="nav-item" *ngIf="!auth.authenticated">
-        <button type="button" class="nav-link btn" (click)="signIn()">Sign In</button>
+      <li class="nav-item">
+        <button type="button" class="nav-link btn">Sign In</button>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,7 +18,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Acount Settings - WIP</a>
           <a class="dropdown-item" routerLink="budgetcreation">My Budgets - WIP</a>
-          <a class="dropdown-item" (click)="signOut()">Sign Out</a>
+          <a class="dropdown-item">Sign Out</a>
         </div>
       </li>
     </ul>
