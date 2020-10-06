@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const TransRecordSchema = schema({
-    date: {type: String, required: true},
-    amount: {type: Number, required: true},
-    category: {type: String, required: true}
+    transactionDate: {type: String, required: true},
+    transactionAmount: {type: Number, required: true},
+    transactionCategory: {type: String, required: true}
 });
 
 const TransRecord = module.exports = mongoose.model("TransRecord", TransRecordSchema);

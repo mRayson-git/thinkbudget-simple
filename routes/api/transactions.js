@@ -16,18 +16,12 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log('transaction API hit');
-    let trans = {
-        date: req.body.date,
-        amount: req.body.amount,
-        category: req.body.category
-    }
-    transaction.addTransaction(trans, (err, result) => {
+    console.log(req.body);
+    transaction.addTransaction(req.body, (err, result) => {
         if (err) {
-            console.log(err);
-            res.json({success: false, msg: 'Could not add transaction'});
+            throw err;
         } else {
-            res.json({success: true, msg: 'Transaction added'});
+            res.json(result);
         }
     });
 });
