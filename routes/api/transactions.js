@@ -5,13 +5,22 @@ const transaction = require('../../models/transaction');
 
 // GET
 router.get('/:userEmail', (req, res) => {
-    console.log('transaction API hit');
-    transaction.getTransactions(req.params.userEmail, (err, transactions) => {
-        if (err) throw err;
-        else {
-            res.json(transactions);
-        }
-    });
+    // if there is a timeframe parameter; else just get everything
+    if(req.query.timeframe){
+        transaction.getTransactionByTimeframe(req.params.userEmail, req.query.timeframe, (err, transactions) => {
+            if (err) throw err;
+            else {
+                res.json(transactions);
+            }
+        });
+    } else {
+        transaction.getTransactions(req.params.userEmail, (err, transactions) => {
+            if (err) throw err;
+            else {
+                res.json(transactions);
+            }
+        });
+    }
 });
 
 

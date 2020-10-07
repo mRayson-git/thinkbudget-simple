@@ -18,7 +18,6 @@ module.exports.addTransaction = function(transaction, callback) {
     TransRecord.create(transaction, callback);
 }
 
-module.exports.getTransactionByTimeAndName = function (category, year, month, callback) {
-    console.log("Searching for: " + category + " year: " + year + " month: " + month)
-    TransRecord.find({ "category": category, "date": { "$regex": year + '-' + month } }, callback);
+module.exports.getTransactionByTimeframe = function (userEmail, timeframe, callback) {
+    TransRecord.find({ "userEmail": userEmail, "transactionDate": { "$regex": timeframe } }, callback);
 }

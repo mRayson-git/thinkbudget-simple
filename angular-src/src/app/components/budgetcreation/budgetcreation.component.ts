@@ -25,8 +25,11 @@ function uniqueCategory(list: string[]): ValidatorFn {
 export class BudgetcreationComponent implements OnInit {
   knownCategoryForm: FormGroup;
   customCategoryForm: FormGroup;
+  budgetTotalForm: FormGroup;
   budget: Budget;
   categories: Category[];
+  budgetTotal: number;
+  remainingBudget: number;
   knownCategories: string[];
   message: Message;
 
@@ -49,13 +52,21 @@ export class BudgetcreationComponent implements OnInit {
       categoryName: ['', [Validators.required, uniqueCategory(this.knownCategories)]],
       categoryAmount: ['', Validators.required]
     });
+    this.budgetTotalForm = this.formBuilder.group({
+      budgetTotal: ['', Validators.required]
+    });
 
     this.getBudget();
     this.knownCategories.sort();
     this.sortCategories(this.categories);
+    this.calculateRemainingBudget();
   }
 
   // Submit Functions
+  addBudgetTotal() {
+    this.budgetTotal = this.budgetTotalForm.get('budgetTotal').value;
+    this.budgetTotalForm.reset();
+  }
   addKnownCategory() {
     let category: Category = {
       categoryName: this.knownCategoryForm.get('categoryName').value,
@@ -65,6 +76,7 @@ export class BudgetcreationComponent implements OnInit {
     this.removeCategory(category.categoryName);
     this.categories.push(category);
     this.sortCategories(this.categories);
+    this.calculateRemainingBudget();
     this.knownCategoryForm.reset({
       categoryName: '',
       categoryAmount: null
@@ -77,10 +89,10 @@ export class BudgetcreationComponent implements OnInit {
     }
     this.knownCategories.push(category.categoryName);
     this.categories.push(category);
-    //console.log(this.categories);
+    this.sortCategories(this.categories);
+    this.calculateRemainingBudget();
     this.customCategoryForm.reset();
   }
-
   getBudget() {
     this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(
       budget => {
@@ -96,8 +108,11 @@ export class BudgetcreationComponent implements OnInit {
 
   // Adding budget to database
   updateBudget() {
+    //sort the categories before inserting into the database
+    this.sortCategories(this.categories);
     let budget: Budget = {
       userEmail: "mrayson5129@gmail.com",
+      budgetTotal: this.budgetTotal,
       budgetCategories: this.categories
     }
     this.budgetService.getBudgetByName(budget.userEmail).subscribe(response => {
@@ -127,12 +142,17 @@ export class BudgetcreationComponent implements OnInit {
       }
     });
   }
-
+  isInvalidBudgetTotal(field: string): boolean {
+    return (this.budgetTotalForm.get(field).touched || this.budgetTotalForm.get(field).dirty) && !this.budgetTotalForm.get(field).valid;
+  }
+  isValidBudgetTotal(field: string): boolean {
+    return (this.budgetTotalForm.get(field).touched || this.budgetTotalForm.get(field).dirty) && this.budgetTotalForm.get(field).valid;
+  }
   isInvalidKnownCategory(field: string): boolean {
-    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && !this.knownCategoryForm.get(field).valid? true : false;
+    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && !this.knownCategoryForm.get(field).valid;
   }
   isValidKnownCategory(field: string): boolean {
-    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && this.knownCategoryForm.get(field).valid? true : false;
+    return (this.knownCategoryForm.get(field).touched || this.knownCategoryForm.get(field).dirty) && this.knownCategoryForm.get(field).valid;
   }
   isInvalidCategory(field: string): boolean {
     return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && !this.customCategoryForm.get(field).valid;
@@ -150,18 +170,28 @@ export class BudgetcreationComponent implements OnInit {
       }
       this.categories.push(category);
     });
+    this.budgetTotal = budget.budgetTotal;
     this.knownCategories.sort();
     this.sortCategories(this.categories);
+    this.calculateRemainingBudget();
   }
 
   removeCategory(categoryName: string) {
     this.categories = this.categories.filter((category) => {return category.categoryName !== categoryName});
   }
 
-  sortCategories(categories: Category[]){
+  sortCategories(categories: Category[]): void {
     categories.sort((first, second) => {
       return first.categoryName > second.categoryName? 1 : -1;
     });
+  }
+
+  calculateRemainingBudget() {
+    let sum = 0;
+    this.categories.forEach((category) => {
+      sum += category.categoryAmount;
+    });
+    this.remainingBudget = this.budgetTotal - sum;
   }
 
 }

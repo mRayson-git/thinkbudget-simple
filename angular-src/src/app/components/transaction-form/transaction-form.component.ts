@@ -8,6 +8,8 @@ import { Budget } from 'src/app/models/budget';
 import { BudgetService } from 'src/app/services/budget.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 
+// TODO: Add sorting for table and options
+
 @Component({
   selector: 'app-transaction-form',
   templateUrl: './transaction-form.component.html',
@@ -51,11 +53,11 @@ export class TransactionFormComponent implements OnInit {
     this.transactionService.saveTransaction(transaction).subscribe(transaction => {
       if (transaction) {
         console.log(transaction);
+        this.getTransactions(this.userEmail);
       } else {
         console.error('failure');
       }
     });
-    this.getTransactions(this.userEmail);
     this.transactionForm.reset();
   }
 

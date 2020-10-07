@@ -17,4 +17,9 @@ export class TransactionService {
   getTransactions(userEmail: string): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(this.transactionUrl + userEmail);
   }
+
+  getTransactionsInTimeframe(userEmail: string, timeframe: string): Observable<Transaction[]> {
+    console.log(this.transactionUrl + userEmail + '?timeframe=' + timeframe);
+    return this.http.get<Transaction[]>(this.transactionUrl + userEmail + '?timeframe=' + timeframe);
+  }
 }
