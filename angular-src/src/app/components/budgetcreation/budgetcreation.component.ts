@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'; 
+import { AuthService } from '@auth0/auth0-angular';
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { Message } from 'src/app/models/message';
@@ -32,11 +33,22 @@ export class BudgetcreationComponent implements OnInit {
   remainingBudget: number;
   knownCategories: string[];
   message: Message;
+  userEmail: string;
 
-  constructor(private formBuilder: FormBuilder, private budgetService: BudgetService) { }
+  constructor(
+    private formBuilder: FormBuilder, 
+    private budgetService: BudgetService,
+    public auth: AuthService) { }
 
   ngOnInit(): void {
     this.categories = [];
+    this.auth.user$.subscribe(user => {
+      this.userEmail = user.email;
+      this.getBudget();
+      this.knownCategories.sort();
+      this.sortCategories(this.categories);
+      this.calculateRemainingBudget();
+    });
     this.knownCategories = [
       "Rent",
       "Groceries",
@@ -55,11 +67,7 @@ export class BudgetcreationComponent implements OnInit {
     this.budgetTotalForm = this.formBuilder.group({
       budgetTotal: ['', Validators.required]
     });
-
-    this.getBudget();
-    this.knownCategories.sort();
-    this.sortCategories(this.categories);
-    this.calculateRemainingBudget();
+    
   }
 
   // Submit Functions
@@ -93,7 +101,7 @@ export class BudgetcreationComponent implements OnInit {
     this.customCategoryForm.reset();
   }
   getBudget() {
-    this.budgetService.getBudgetByName("mrayson5129@gmail.com").subscribe(
+    this.budgetService.getBudgetByName(this.userEmail).subscribe(
       budget => {
         if (budget !== null){
           this.budget = budget;
@@ -110,7 +118,7 @@ export class BudgetcreationComponent implements OnInit {
     //sort the categories before inserting into the database
     this.sortCategories(this.categories);
     let budget: Budget = {
-      userEmail: "mrayson5129@gmail.com",
+      userEmail: this.userEmail,
       budgetTotal: this.budgetTotal,
       budgetCategories: this.categories
     }
