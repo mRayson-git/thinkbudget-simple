@@ -1,1 +1,46 @@
-<button type="button" class="btn btn-primary" routerLink="/transaction">Add a transaction</button>
+<div *ngIf="budget; else loading">
+    <!-- 1st Row -->
+    <div class="row">
+        <!-- Menu -->
+        <div class="col-sm-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h2 class="text-success">Menu</h2>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success" routerLink="/transaction">Add a transaction</button>
+                </div>
+            </div>
+        </div>
+        <!-- Per Category Bar Chart -->
+        <div class="col-sm-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h2 class="text-success">Per Category Overview</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let category of activity">
+                            {{ category.categoryName }} | Used: {{ category.categoryActivity | currency }} / {{ category.categoryBudget | currency }}
+                            <ngb-progressbar [type]="category.categoryType" [value]="category.percent">{{ category.percent }}%</ngb-progressbar>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-3">
+
+    <!-- 2nd row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card shadow">
+                <div class="card-body" id="divChart">
+                    <canvas id="categoryOverviewChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #loading>Loading</ng-template>
+

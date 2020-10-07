@@ -193,5 +193,4 @@ export class BudgetcreationComponent implements OnInit {
     });
     this.remainingBudget = this.budgetTotal - sum;
   }
-
 }
