@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
     categoryName: string,
     categoryBudget: number,
     categoryActivity: number,
+    categoryColour: string,
     percent?: number,
     categoryType?: string
   }[];
@@ -37,12 +38,12 @@ export class DashboardComponent implements OnInit {
       this.userEmail = user.email;
       this.budgetService.getBudgetByName(user.email).subscribe(budget => {
         this.budget = budget;
-      });
-      this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
-        this.transactions = transactions;
-        this.getActivity();
-        console.log(this.activity);
-        this.createPieChart();
+        this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
+          this.transactions = transactions;
+          this.getActivity();
+          console.log(this.activity);
+          this.createPieChart();
+        });
       });
     });
   }
@@ -71,6 +72,7 @@ export class DashboardComponent implements OnInit {
         categoryName: category.categoryName,
         categoryBudget: category.categoryAmount,
         categoryActivity: categoryActivity,
+        categoryColour: category.categoryColour,
         percent: Math.floor(percent),
         categoryType: type
       });
@@ -90,6 +92,7 @@ export class DashboardComponent implements OnInit {
       categoryBudget: this.budget.budgetTotal,
       categoryActivity: totalActivity,
       percent: Math.floor(percent),
+      categoryColour: "#b5b8bd",
       categoryType: type
     });
   }
@@ -107,16 +110,21 @@ export class DashboardComponent implements OnInit {
   createPieChart(){
     let labels = [];
     let data = [];
+    let backgroundColour = [];
     // add all the categories and their activity
     this.activity.forEach(category => {
       if (category.categoryName !== 'Total') {
         labels.push(category.categoryName);
         data.push(category.categoryActivity);
+        backgroundColour.push(category.categoryColour);
       }
     });
     // add the remaining budget left
     labels.push("Budget Remaining");
     data.push(this.getCategoryActvitiy('Total').categoryBudget - this.getCategoryActvitiy('Total').categoryActivity);
+    backgroundColour.push(this.getCategoryActvitiy('Total').categoryColour);
+
+
     var myChart = new Chart("categoryOverviewChart", {
       type: 'pie',
       data: {
@@ -124,10 +132,15 @@ export class DashboardComponent implements OnInit {
           datasets: [{
               label: 'Activity Per Category',
               data: data,
-              backgroundColor: [ ],
-              borderColor: [ ],
+              backgroundColor: backgroundColour,
               borderWidth: 1
           }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Spending Vs. What Remains"
+        }
       }
   });
   }

@@ -33,60 +33,71 @@
           </div>
         </form>
         <hr class="my-3">
-        <h5>Use a known category</h5>
-        <!-- Use known categories -->
-        <form [formGroup]="knownCategoryForm" (ngSubmit)="addKnownCategory()">
+        <h5>Create your own category</h5>
+        <!-- Add a new category -->
+        <form [formGroup]="customCategoryForm" (ngSubmit)="addCustomCategory()">
           <div class="form-row">
-            <!-- Category Name Drop Down -->
-            <div class="col-5">
-              <select class="form-control" formControlName="categoryName" 
-              [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryName'), 'is-valid': isValidKnownCategory('categoryName') }">
-                <option value='' class="text-muted">Choose a Category</option>
-                <option *ngFor="let category of knownCategories">{{ category }}</option>
-              </select>
-              <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
-                Required.
-              </span>
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" id="categoryName" placeholder="Category name" formControlName="categoryName"
+                [ngClass]="{ 'is-invalid': isInvalidCategory('categoryName'), 'is-valid': isValidCategory('categoryName') }">
+                <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.notUnique">
+                  Must be unique.
+                </span>
+                <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.required">
+                  Required.
+                </span>
+              </div>
             </div>
-            <!-- Category Amount -->
-            <div class="col-3">
-              <input type="number" class="form-control" formControlName="categoryAmount" placeholder="0.00" 
-              [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryAmount'), 'is-valid': isValidKnownCategory('categoryAmount') }">
-              <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
-                Required.
-              </span>
-            </div>
-            <!-- Submit Button -->
-            <div class="col-sm-12 mt-sm-3 col-md-4 mt-md-0">
-              <button type="submit" class="btn btn-success" [disabled]="!knownCategoryForm.valid">Add Category</button>
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <button type="submit" class="btn btn-success" [disabled]="!customCategoryForm.valid">Add Category</button>
+              </div>
             </div>
           </div>
         </form>
         <hr class="my-3">
-        <h5>Create your own category</h5>
-        
-        <!-- Add a new category -->
-        <form [formGroup]="customCategoryForm" (ngSubmit)="addCustomCategory()">
+        <h5>Add a Category to the Budget</h5>
+        <!-- Use known categories -->
+        <form [formGroup]="knownCategoryForm" (ngSubmit)="addKnownCategory()">
           <div class="form-row">
-            <div class="col-5">
-              <input type="text" class="form-control" id="categoryName" placeholder="Category name" formControlName="categoryName"
-              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryName'), 'is-valid': isValidCategory('categoryName') }">
-              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.notUnique">
-                Must be unique.
-              </span>
-              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryName').errors?.required">
-                Required.
-              </span>
+            <!-- Category Name Drop Down -->
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <select class="form-control" formControlName="categoryName" 
+                [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryName'), 'is-valid': isValidKnownCategory('categoryName') }">
+                  <option value='' class="text-muted">Choose a Category</option>
+                  <option *ngFor="let category of knownCategories">{{ category }}</option>
+                </select>
+                <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
+                  Required.
+                </span>
+              </div>
             </div>
-            <div class="col-3">
-              <input type="number" class="form-control" id="categoryAmount" formControlName="categoryAmount"
-              [ngClass]="{ 'is-invalid': isInvalidCategory('categoryAmount'), 'is-valid': isValidCategory('categoryAmount') }" placeholder="0.00">
-              <span class="invalid-feedback" *ngIf="customCategoryForm.get('categoryAmount').errors">
-                Required.
-              </span>
+            <!-- Category Amount -->
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <input type="number" class="form-control" formControlName="categoryAmount" placeholder="0.00" 
+                [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryAmount'), 'is-valid': isValidKnownCategory('categoryAmount') }">
+                <span class="invalid-feedback" *ngIf="knownCategoryForm.get('categoryAmount').errors">
+                  Required.
+                </span>
+              </div>
             </div>
-            <div class="col-sm-12 mt-sm-3 col-md-4 mt-md-0">
-              <button type="submit" class="btn btn-success" [disabled]="!customCategoryForm.valid">Add Category</button>
+          </div>
+          <div class="form-row">
+            <!-- Colour Picker -->
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <input type="color" class="form-control" formControlName="categoryColour"
+                [ngClass]="{ 'is-invalid': isInvalidKnownCategory('categoryColour'), 'is-valid': isValidKnownCategory('categoryColour') }">
+              </div>
+            </div>
+            <!-- Submit Button -->
+            <div class="col-sm-12 col-md-6">
+              <div class="form-group">
+                <button type="submit" class="btn btn-success" [disabled]="!knownCategoryForm.valid">Add Category</button>
+              </div>
             </div>
           </div>
         </form>

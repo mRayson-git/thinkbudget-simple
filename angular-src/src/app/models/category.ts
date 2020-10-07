@@ -1,4 +1,5 @@
 export interface Category {
     categoryName: string,
-    categoryAmount: number
+    categoryAmount: number,
+    categoryColour: string
 }

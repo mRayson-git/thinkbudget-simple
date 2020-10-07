@@ -46,11 +46,11 @@ export class BudgetcreationComponent implements OnInit {
     ]
     this.knownCategoryForm = this.formBuilder.group({
       categoryName: ['', Validators.required],
-      categoryAmount: ['', Validators.required]
+      categoryAmount: ['', Validators.required],
+      categoryColour: ['#5cb85c', Validators.required]
     });
     this.customCategoryForm = this.formBuilder.group({
       categoryName: ['', [Validators.required, uniqueCategory(this.knownCategories)]],
-      categoryAmount: ['', Validators.required]
     });
     this.budgetTotalForm = this.formBuilder.group({
       budgetTotal: ['', Validators.required]
@@ -70,27 +70,26 @@ export class BudgetcreationComponent implements OnInit {
   addKnownCategory() {
     let category: Category = {
       categoryName: this.knownCategoryForm.get('categoryName').value,
-      categoryAmount: this.knownCategoryForm.get('categoryAmount').value
+      categoryAmount: this.knownCategoryForm.get('categoryAmount').value,
+      categoryColour: this.knownCategoryForm.get('categoryColour').value
     }
     //check to see if it has already been added
     this.removeCategory(category.categoryName);
     this.categories.push(category);
     this.sortCategories(this.categories);
     this.calculateRemainingBudget();
+    console.log(this.knownCategoryForm.value);
     this.knownCategoryForm.reset({
       categoryName: '',
-      categoryAmount: null
+      categoryAmount: null,
+      categoryColour: '#5cb85c'
     });
+    
   }
   addCustomCategory(){
-    let category: Category = {
-      categoryName: this.customCategoryForm.get('categoryName').value,
-      categoryAmount: this.customCategoryForm.get('categoryAmount').value
-    }
-    this.knownCategories.push(category.categoryName);
-    this.categories.push(category);
-    this.sortCategories(this.categories);
-    this.calculateRemainingBudget();
+    let categoryName = this.customCategoryForm.get('categoryName').value;
+    this.knownCategories.push(categoryName);
+    this.knownCategories.sort();
     this.customCategoryForm.reset();
   }
   getBudget() {
