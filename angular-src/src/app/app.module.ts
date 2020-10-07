@@ -7,9 +7,13 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { BudgetcreationComponent } from './components/budgetcreation/budgetcreation.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
+
 
 import { AuthModule } from '@auth0/auth0-angular';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -17,13 +21,15 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     NavbarComponent,
     HomepageComponent,
     BudgetcreationComponent,
-    DashboardComponent
+    DashboardComponent,
+    TransactionFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
     AuthModule.forRoot({
       domain: 'thinkbudget.us.auth0.com',
       clientId: 'WGsP58Ux7cxxdLAjlujSEs5792YNeGwC'

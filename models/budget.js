@@ -3,6 +3,7 @@ const schema = mongoose.Schema;
 
 const BudgetSchema = schema({
     userEmail: {type: String, required: true},
+    budgetTotal: {type: Number, required: true},
     budgetCategories: {type: [], required: true }
 });
 
