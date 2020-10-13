@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'; 
-import { AuthService } from '@auth0/auth0-angular';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { Message } from 'src/app/models/message';
@@ -15,7 +14,7 @@ function uniqueCategory(list: string[]): ValidatorFn {
       }
     });
     return notUnique ? {notUnique: {value: c.value}} : null;
-  }
+  };
 }
 
 @Component({
@@ -36,26 +35,21 @@ export class BudgetcreationComponent implements OnInit {
   userEmail: string;
 
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private budgetService: BudgetService,
-    public auth: AuthService) { }
+    ) { }
 
   ngOnInit(): void {
     this.categories = [];
-    this.auth.user$.subscribe(user => {
-      this.userEmail = user.email;
-      this.getBudget();
-      this.knownCategories.sort();
-      this.sortCategories(this.categories);
-      this.calculateRemainingBudget();
-    });
+    this.userEmail = 'mrayson5129@gmail.com';
+    this.getBudget();
     this.knownCategories = [
-      "Rent",
-      "Groceries",
-      "Entertainment",
-      "Outings",
-      "Education"
-    ]
+      'Rent',
+      'Groceries',
+      'Entertainment',
+      'Outings',
+      'Education'
+    ];
     this.knownCategoryForm = this.formBuilder.group({
       categoryName: ['', Validators.required],
       categoryAmount: ['', Validators.required],
@@ -67,21 +61,23 @@ export class BudgetcreationComponent implements OnInit {
     this.budgetTotalForm = this.formBuilder.group({
       budgetTotal: ['', Validators.required]
     });
-    
+    this.knownCategories.sort();
+    this.sortCategories(this.categories);
+    this.calculateRemainingBudget();
   }
 
   // Submit Functions
-  addBudgetTotal() {
+  addBudgetTotal(): void {
     this.budgetTotal = this.budgetTotalForm.get('budgetTotal').value;
     this.budgetTotalForm.reset();
   }
-  addKnownCategory() {
-    let category: Category = {
+  addKnownCategory(): void {
+    const category: Category = {
       categoryName: this.knownCategoryForm.get('categoryName').value,
       categoryAmount: this.knownCategoryForm.get('categoryAmount').value,
       categoryColour: this.knownCategoryForm.get('categoryColour').value
-    }
-    //check to see if it has already been added
+    };
+    // check to see if it has already been added
     this.removeCategory(category.categoryName);
     this.categories.push(category);
     this.sortCategories(this.categories);
@@ -92,15 +88,14 @@ export class BudgetcreationComponent implements OnInit {
       categoryAmount: null,
       categoryColour: '#5cb85c'
     });
-    
   }
-  addCustomCategory(){
-    let categoryName = this.customCategoryForm.get('categoryName').value;
+  addCustomCategory(): void{
+    const categoryName = this.customCategoryForm.get('categoryName').value;
     this.knownCategories.push(categoryName);
     this.knownCategories.sort();
     this.customCategoryForm.reset();
   }
-  getBudget() {
+  getBudget(): void{
     this.budgetService.getBudgetByName(this.userEmail).subscribe(
       budget => {
         if (budget !== null){
@@ -115,15 +110,15 @@ export class BudgetcreationComponent implements OnInit {
 
   // Adding budget to database
   updateBudget() {
-    //sort the categories before inserting into the database
+    // sort the categories before inserting into the database
     this.sortCategories(this.categories);
-    let budget: Budget = {
+    const budget: Budget = {
       userEmail: this.userEmail,
       budgetTotal: this.budgetTotal,
       budgetCategories: this.categories
-    }
+    };
     this.budgetService.getBudgetByName(budget.userEmail).subscribe(response => {
-      if(response === null) {
+      if (response === null) {
         this.budgetService.saveBudget(budget).subscribe(data => {
           if (data !== null) {
             this.updateInformation(budget);
@@ -135,14 +130,14 @@ export class BudgetcreationComponent implements OnInit {
             this.updateInformation(budget);
             this.message = {
               success: true,
-              msg: "Budget has been saved"
-            }
+              msg: 'Budget has been saved'
+            };
             setTimeout(() => this.message = undefined, 3000);
           } else {
             this.message = {
               success: false,
-              msg: "Budget has not been saved"
-            }
+              msg: 'Budget has not been saved'
+            };
             setTimeout(() => this.message = undefined, 3000);
           }
         });
@@ -168,7 +163,7 @@ export class BudgetcreationComponent implements OnInit {
     return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && this.customCategoryForm.get(field).valid;
   }
 
-  //Helper function
+  // Helper function
   updateInformation(budget: Budget) {
     this.categories = [];
     budget.budgetCategories.forEach((category) => {
@@ -184,12 +179,12 @@ export class BudgetcreationComponent implements OnInit {
   }
 
   removeCategory(categoryName: string) {
-    this.categories = this.categories.filter((category) => {return category.categoryName !== categoryName});
+    this.categories = this.categories.filter((category) => category.categoryName !== categoryName);
   }
 
   sortCategories(categories: Category[]): void {
     categories.sort((first, second) => {
-      return first.categoryName > second.categoryName? 1 : -1;
+      return first.categoryName > second.categoryName ? 1 : -1;
     });
   }
 

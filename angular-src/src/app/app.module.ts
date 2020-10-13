@@ -10,8 +10,6 @@ import { BudgetcreationComponent } from './components/budgetcreation/budgetcreat
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 
-
-import { AuthModule } from '@auth0/auth0-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -29,11 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule,
-    AuthModule.forRoot({
-      domain: 'thinkbudget.us.auth0.com',
-      clientId: 'WGsP58Ux7cxxdLAjlujSEs5792YNeGwC'
-    })
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

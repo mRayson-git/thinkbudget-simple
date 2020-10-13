@@ -8,7 +8,7 @@ import { Budget } from '../models/budget';
   providedIn: 'root'
 })
 export class BudgetService {
-  budgetUrl = 'http://localhost:3000/api/budgets/';
+  budgetUrl = '/api/budgets/';
   constructor(private http: HttpClient) { }
 
   

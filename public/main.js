@@ -58,7 +58,7 @@ __webpack_require__.r(__webpack_exports__);
 class TransactionService {
     constructor(http) {
         this.http = http;
-        this.transactionUrl = "http://localhost:3000/api/transactions/";
+        this.transactionUrl = "/api/transactions/";
     }
     saveTransaction(transaction) {
         return this.http.post(this.transactionUrl, transaction);
@@ -96,13 +96,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! node_modules/chart.js */ "MO+k");
 /* harmony import */ var node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-/* harmony import */ var src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/budget.service */ "QKEp");
-/* harmony import */ var src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/transaction.service */ "FkVd");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
-
+/* harmony import */ var src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/budget.service */ "QKEp");
+/* harmony import */ var src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/transaction.service */ "FkVd");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
 
 
 
@@ -181,8 +179,7 @@ function DashboardComponent_ng_template_1_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](0, "Loading");
 } }
 class DashboardComponent {
-    constructor(auth, budgetService, transactionService) {
-        this.auth = auth;
+    constructor(budgetService, transactionService) {
         this.budgetService = budgetService;
         this.transactionService = transactionService;
     }
@@ -190,16 +187,14 @@ class DashboardComponent {
         this.today = new Date();
         let timeframe = this.today.toISOString().slice(0, 7);
         this.activity = [];
-        this.auth.user$.subscribe(user => {
-            this.userEmail = user.email;
-            this.budgetService.getBudgetByName(user.email).subscribe(budget => {
-                this.budget = budget;
-                this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
-                    this.transactions = transactions;
-                    this.getActivity();
-                    console.log(this.activity);
-                    this.createPieChart();
-                });
+        this.userEmail = 'mrayson5129@gmail.com';
+        this.budgetService.getBudgetByName(this.userEmail).subscribe(budget => {
+            this.budget = budget;
+            this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
+                this.transactions = transactions;
+                this.getActivity();
+                console.log(this.activity);
+                this.createPieChart();
             });
         });
     }
@@ -279,7 +274,7 @@ class DashboardComponent {
         data.push(this.getCategoryActvitiy('Total').categoryBudget - this.getCategoryActvitiy('Total').categoryActivity);
         backgroundColour.push(this.getCategoryActvitiy('Total').categoryColour);
         var myChart = new node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"]("categoryOverviewChart", {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: labels,
                 datasets: [{
@@ -298,14 +293,14 @@ class DashboardComponent {
         });
     }
 }
-DashboardComponent.ɵfac = function DashboardComponent_Factory(t) { return new (t || DashboardComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_2__["AuthService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_4__["TransactionService"])); };
+DashboardComponent.ɵfac = function DashboardComponent_Factory(t) { return new (t || DashboardComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_3__["TransactionService"])); };
 DashboardComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: DashboardComponent, selectors: [["app-dashboard"]], decls: 3, vars: 2, consts: [[4, "ngIf", "ngIfElse"], ["loading", ""], [1, "row"], [1, "col-sm-4"], [1, "card", "shadow"], [1, "card-header"], [1, "text-success"], [1, "card-body"], ["routerLink", "/transaction", 1, "btn", "btn-success"], [1, "col-sm-8"], [1, "list-group"], ["class", "list-group-item", 4, "ngFor", "ngForOf"], [1, "my-3"], [1, "col-sm-12"], ["id", "divChart", 1, "card-body"], ["id", "categoryOverviewChart"], [1, "list-group-item"], [3, "type", "value"]], template: function DashboardComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, DashboardComponent_div_0_Template, 24, 1, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, DashboardComponent_ng_template_1_Template, 1, 0, "ng-template", null, 1, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplateRefExtractor"]);
     } if (rf & 2) {
         const _r1 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵreference"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.budget)("ngIfElse", _r1);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_5__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_6__["RouterLink"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbProgressbar"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_5__["CurrencyPipe"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvZGFzaGJvYXJkL2Rhc2hib2FyZC5jb21wb25lbnQuc2NzcyJ9 */"] });
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLink"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgForOf"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbProgressbar"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["CurrencyPipe"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvZGFzaGJvYXJkL2Rhc2hib2FyZC5jb21wb25lbnQuc2NzcyJ9 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](DashboardComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -313,7 +308,7 @@ DashboardComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefin
                 templateUrl: './dashboard.component.html',
                 styleUrls: ['./dashboard.component.scss']
             }]
-    }], function () { return [{ type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_2__["AuthService"] }, { type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"] }, { type: src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_4__["TransactionService"] }]; }, null); })();
+    }], function () { return [{ type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"] }, { type: src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_3__["TransactionService"] }]; }, null); })();
 
 
 /***/ }),
@@ -336,7 +331,7 @@ __webpack_require__.r(__webpack_exports__);
 class BudgetService {
     constructor(http) {
         this.http = http;
-        this.budgetUrl = 'http://localhost:3000/api/budgets/';
+        this.budgetUrl = '/api/budgets/';
     }
     //GET
     getBudgetByName(userEmail) {
@@ -706,41 +701,6 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCompo
 
 /***/ }),
 
-/***/ "UTcu":
-/*!**************************************!*\
-  !*** ./src/app/guards/auth.guard.ts ***!
-  \**************************************/
-/*! exports provided: AuthGuard */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-
-
-
-class AuthGuard {
-    constructor(auth) {
-        this.auth = auth;
-    }
-    canActivate(route, state) {
-        return this.auth.isAuthenticated$;
-    }
-}
-AuthGuard.ɵfac = function AuthGuard_Factory(t) { return new (t || AuthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"])); };
-AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AuthGuard, factory: AuthGuard.ɵfac, providedIn: 'root' });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthGuard, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
-        args: [{
-                providedIn: 'root'
-            }]
-    }], function () { return [{ type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"] }]; }, null); })();
-
-
-/***/ }),
-
 /***/ "Uu4B":
 /*!***********************************************************************!*\
   !*** ./src/app/components/budgetcreation/budgetcreation.component.ts ***!
@@ -754,9 +714,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
 /* harmony import */ var src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/budget.service */ "QKEp");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
-
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ "ofXK");
 
 
 
@@ -921,26 +879,20 @@ function uniqueCategory(list) {
     };
 }
 class BudgetcreationComponent {
-    constructor(formBuilder, budgetService, auth) {
+    constructor(formBuilder, budgetService) {
         this.formBuilder = formBuilder;
         this.budgetService = budgetService;
-        this.auth = auth;
     }
     ngOnInit() {
         this.categories = [];
-        this.auth.user$.subscribe(user => {
-            this.userEmail = user.email;
-            this.getBudget();
-            this.knownCategories.sort();
-            this.sortCategories(this.categories);
-            this.calculateRemainingBudget();
-        });
+        this.userEmail = 'mrayson5129@gmail.com';
+        this.getBudget();
         this.knownCategories = [
-            "Rent",
-            "Groceries",
-            "Entertainment",
-            "Outings",
-            "Education"
+            'Rent',
+            'Groceries',
+            'Entertainment',
+            'Outings',
+            'Education'
         ];
         this.knownCategoryForm = this.formBuilder.group({
             categoryName: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
@@ -953,6 +905,9 @@ class BudgetcreationComponent {
         this.budgetTotalForm = this.formBuilder.group({
             budgetTotal: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
         });
+        this.knownCategories.sort();
+        this.sortCategories(this.categories);
+        this.calculateRemainingBudget();
     }
     // Submit Functions
     addBudgetTotal() {
@@ -960,12 +915,12 @@ class BudgetcreationComponent {
         this.budgetTotalForm.reset();
     }
     addKnownCategory() {
-        let category = {
+        const category = {
             categoryName: this.knownCategoryForm.get('categoryName').value,
             categoryAmount: this.knownCategoryForm.get('categoryAmount').value,
             categoryColour: this.knownCategoryForm.get('categoryColour').value
         };
-        //check to see if it has already been added
+        // check to see if it has already been added
         this.removeCategory(category.categoryName);
         this.categories.push(category);
         this.sortCategories(this.categories);
@@ -978,7 +933,7 @@ class BudgetcreationComponent {
         });
     }
     addCustomCategory() {
-        let categoryName = this.customCategoryForm.get('categoryName').value;
+        const categoryName = this.customCategoryForm.get('categoryName').value;
         this.knownCategories.push(categoryName);
         this.knownCategories.sort();
         this.customCategoryForm.reset();
@@ -993,9 +948,9 @@ class BudgetcreationComponent {
     }
     // Adding budget to database
     updateBudget() {
-        //sort the categories before inserting into the database
+        // sort the categories before inserting into the database
         this.sortCategories(this.categories);
-        let budget = {
+        const budget = {
             userEmail: this.userEmail,
             budgetTotal: this.budgetTotal,
             budgetCategories: this.categories
@@ -1014,14 +969,14 @@ class BudgetcreationComponent {
                         this.updateInformation(budget);
                         this.message = {
                             success: true,
-                            msg: "Budget has been saved"
+                            msg: 'Budget has been saved'
                         };
                         setTimeout(() => this.message = undefined, 3000);
                     }
                     else {
                         this.message = {
                             success: false,
-                            msg: "Budget has not been saved"
+                            msg: 'Budget has not been saved'
                         };
                         setTimeout(() => this.message = undefined, 3000);
                     }
@@ -1047,7 +1002,7 @@ class BudgetcreationComponent {
     isValidCategory(field) {
         return (this.customCategoryForm.get(field).touched || this.customCategoryForm.get(field).dirty) && this.customCategoryForm.get(field).valid;
     }
-    //Helper function
+    // Helper function
     updateInformation(budget) {
         this.categories = [];
         budget.budgetCategories.forEach((category) => {
@@ -1062,7 +1017,7 @@ class BudgetcreationComponent {
         this.calculateRemainingBudget();
     }
     removeCategory(categoryName) {
-        this.categories = this.categories.filter((category) => { return category.categoryName !== categoryName; });
+        this.categories = this.categories.filter((category) => category.categoryName !== categoryName);
     }
     sortCategories(categories) {
         categories.sort((first, second) => {
@@ -1077,7 +1032,7 @@ class BudgetcreationComponent {
         this.remainingBudget = this.budgetTotal - sum;
     }
 }
-BudgetcreationComponent.ɵfac = function BudgetcreationComponent_Factory(t) { return new (t || BudgetcreationComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_3__["AuthService"])); };
+BudgetcreationComponent.ɵfac = function BudgetcreationComponent_Factory(t) { return new (t || BudgetcreationComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"])); };
 BudgetcreationComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: BudgetcreationComponent, selectors: [["app-budgetcreation"]], decls: 60, vars: 34, consts: [[1, "card", "shadow"], [1, "card-header"], [1, "text-success"], [1, "card-body"], [4, "ngIf"], [1, "row"], [1, "col-sm-12", "col-md-6"], [3, "formGroup", "ngSubmit"], [1, "form-row"], [1, "col-sm-12", "col-md-8"], [1, "form-group"], ["type", "number", "formControlName", "budgetTotal", "placeholder", "0.00", 1, "form-control", 3, "ngClass"], [1, "col-sm-12", "col-md-4"], ["type", "submit", 1, "btn", "btn-success", 3, "disabled"], [1, "my-3"], ["type", "text", "id", "categoryName", "placeholder", "Category name", "formControlName", "categoryName", 1, "form-control", 3, "ngClass"], ["class", "invalid-feedback", 4, "ngIf"], ["formControlName", "categoryName", 1, "form-control", 3, "ngClass"], ["value", "", 1, "text-muted"], [4, "ngFor", "ngForOf"], ["type", "number", "formControlName", "categoryAmount", "placeholder", "0.00", 1, "form-control", 3, "ngClass"], ["type", "color", "formControlName", "categoryColour", 1, "form-control", 3, "ngClass"], ["class", "col mt-3", 4, "ngIf", "ngIfElse"], ["helpMessage", ""], ["class", "alert alert-success", 4, "ngIf"], ["class", "alert alert-danger", 4, "ngIf"], [1, "alert", "alert-success"], [1, "alert", "alert-danger"], [1, "invalid-feedback"], [1, "col", "mt-3"], [1, "card"], [1, "card-header", "d-flex", "justify-content-between"], ["type", "button", 1, "btn", "btn-success", 3, "click"], [1, "table", "table-striped", "table-bordered"], [1, "align-middle"], [1, "text-center"], ["type", "button", 1, "btn", "btn-danger", "btn-sm", 3, "click"], ["width", "24", "height", "24", "fill", "currentColor", 1, "bi"], [0, "xlink", "href", "assets/bootstrap-icons.svg#trash"], [1, "alert", "alert-warning"]], template: function BudgetcreationComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 1);
@@ -1216,7 +1171,7 @@ BudgetcreationComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵ
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("disabled", !ctx.knownCategoryForm.valid);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.categories && ctx.categories.length !== 0)("ngIfElse", _r7);
-    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["NgIf"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgClass"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_x"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgForOf"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["CurrencyPipe"]], styles: [".footer[_ngcontent-%COMP%] {\n  height: 100vh;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9idWRnZXRjcmVhdGlvbi9idWRnZXRjcmVhdGlvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLGFBQUE7QUFDSiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvYnVkZ2V0Y3JlYXRpb24vYnVkZ2V0Y3JlYXRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZm9vdGVye1xyXG4gICAgaGVpZ2h0OiAxMDB2aDtcclxufSJdfQ== */"] });
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_3__["NgIf"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_common__WEBPACK_IMPORTED_MODULE_3__["NgClass"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_x"], _angular_common__WEBPACK_IMPORTED_MODULE_3__["NgForOf"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_3__["CurrencyPipe"]], styles: [".footer[_ngcontent-%COMP%] {\n  height: 100vh;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9idWRnZXRjcmVhdGlvbi9idWRnZXRjcmVhdGlvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLGFBQUE7QUFDSiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvYnVkZ2V0Y3JlYXRpb24vYnVkZ2V0Y3JlYXRpb24uY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZm9vdGVye1xyXG4gICAgaGVpZ2h0OiAxMDB2aDtcclxufSJdfQ== */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](BudgetcreationComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -1224,7 +1179,7 @@ BudgetcreationComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵ
                 templateUrl: './budgetcreation.component.html',
                 styleUrls: ['./budgetcreation.component.scss']
             }]
-    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"] }, { type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_3__["AuthService"] }]; }, null); })();
+    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_2__["BudgetService"] }]; }, null); })();
 
 
 /***/ }),
@@ -1250,10 +1205,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_budgetcreation_budgetcreation_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/budgetcreation/budgetcreation.component */ "Uu4B");
 /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "Lquv");
 /* harmony import */ var _components_transaction_form_transaction_form_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/transaction-form/transaction-form.component */ "vDzH");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
-
-
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
 
 
 
@@ -1275,11 +1227,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
             _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_12__["NgbModule"],
-            _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_11__["AuthModule"].forRoot({
-                domain: 'thinkbudget.us.auth0.com',
-                clientId: 'WGsP58Ux7cxxdLAjlujSEs5792YNeGwC'
-            })
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_11__["NgbModule"]
         ]] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsetNgModuleScope"](AppModule, { declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
         _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_6__["NavbarComponent"],
@@ -1290,7 +1238,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
         _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
         _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
         _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-        _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_12__["NgbModule"], _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_11__["AuthModule"]] }); })();
+        _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_11__["NgbModule"]] }); })();
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AppModule, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"],
         args: [{
@@ -1307,11 +1255,7 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
                     _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
                     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
                     _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-                    _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_12__["NgbModule"],
-                    _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_11__["AuthModule"].forRoot({
-                        domain: 'thinkbudget.us.auth0.com',
-                        clientId: 'WGsP58Ux7cxxdLAjlujSEs5792YNeGwC'
-                    })
+                    _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_11__["NgbModule"]
                 ],
                 providers: [],
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
@@ -1332,57 +1276,19 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavbarComponent", function() { return NavbarComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "1kSV");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
 
 
 
 
-
-
-function NavbarComponent_li_12_Template(rf, ctx) { if (rf & 1) {
-    const _r4 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "li", 11);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, " Account ");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "div", 13);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "a", 14);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5, "Dashboard");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "a", 15);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, "Acount Settings - WIP");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "a", 16);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](9, "My Budget");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](10, "a", 17);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function NavbarComponent_li_12_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r4); const ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](); return ctx_r3.auth.logout(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](11, "Sign Out");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-} }
-function NavbarComponent_ng_template_14_Template(rf, ctx) { if (rf & 1) {
-    const _r6 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "li", 7);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "button", 18);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function NavbarComponent_ng_template_14_Template_button_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r6); const ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](); return ctx_r5.auth.loginWithRedirect(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "Sign In");
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-} }
 class NavbarComponent {
-    constructor(auth) {
-        this.auth = auth;
-    }
+    constructor() { }
     ngOnInit() {
     }
 }
-NavbarComponent.ɵfac = function NavbarComponent_Factory(t) { return new (t || NavbarComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"])); };
-NavbarComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: NavbarComponent, selectors: [["app-navbar"]], decls: 16, vars: 4, consts: [[1, "navbar", "navbar-expand-lg", "navbar-dark", "bg-secondary"], [1, "navbar-brand", "mb-0", "h1"], [1, "text-success"], ["type", "button", "data-toggle", "collapse", "data-target", "#navbarNav", 1, "navbar-toggler"], [1, "navbar-toggler-icon"], ["id", "navbarNav", 1, "collapse", "navbar-collapse"], [1, "navbar-nav"], [1, "nav-item"], ["routerLink", "homepage", 1, "nav-link"], ["class", "nav-item dropdown", 4, "ngIf", "ngIfElse"], ["signIn", ""], [1, "nav-item", "dropdown"], ["href", "#", "id", "navbarDropdownMenuLink", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "nav-link", "dropdown-toggle"], ["aria-labelledby", "navbarDropdownMenuLink", 1, "dropdown-menu"], ["routerLink", "dashboard", 1, "dropdown-item"], ["href", "#", 1, "dropdown-item"], ["routerLink", "budgetcreation", 1, "dropdown-item"], [1, "dropdown-item", 3, "click"], ["type", "button", 1, "nav-link", "btn", 3, "click"]], template: function NavbarComponent_Template(rf, ctx) { if (rf & 1) {
+NavbarComponent.ɵfac = function NavbarComponent_Factory(t) { return new (t || NavbarComponent)(); };
+NavbarComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: NavbarComponent, selectors: [["app-navbar"]], decls: 22, vars: 0, consts: [[1, "navbar", "navbar-expand-lg", "navbar-dark", "bg-secondary"], [1, "navbar-brand", "mb-0", "h1"], [1, "text-success"], ["type", "button", "data-toggle", "collapse", "data-target", "#navbarNav", 1, "navbar-toggler"], [1, "navbar-toggler-icon"], ["id", "navbarNav", 1, "collapse", "navbar-collapse"], [1, "navbar-nav"], [1, "nav-item"], ["routerLink", "homepage", 1, "nav-link"], [1, "nav-item", "dropdown"], ["href", "#", "id", "navbarDropdownMenuLink", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "nav-link", "dropdown-toggle"], ["aria-labelledby", "navbarDropdownMenuLink", 1, "dropdown-menu"], ["routerLink", "dashboard", 1, "dropdown-item"], ["href", "#", 1, "dropdown-item"], ["routerLink", "budgetcreation", 1, "dropdown-item"]], template: function NavbarComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "nav", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "span", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "think");
@@ -1400,17 +1306,26 @@ NavbarComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](11, "Home");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](12, NavbarComponent_li_12_Template, 12, 0, "li", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpipe"](13, "async");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](14, NavbarComponent_ng_template_14_Template, 3, 0, "ng-template", null, 10, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplateRefExtractor"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "li", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](13, "a", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](14, " Account ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "div", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "a", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "Dashboard");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "a", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](19, "Acount Settings - WIP");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](20, "a", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](21, "My Budget");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-    } if (rf & 2) {
-        const _r1 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵreference"](15);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](12);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵpipeBind1"](13, 2, ctx.auth.isAuthenticated$))("ngIfElse", _r1);
-    } }, directives: [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbNavbar"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterLinkWithHref"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgIf"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["AsyncPipe"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvbmF2YmFyL25hdmJhci5jb21wb25lbnQuc2NzcyJ9 */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    } }, directives: [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_1__["NgbNavbar"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvbmF2YmFyL25hdmJhci5jb21wb25lbnQuc2NzcyJ9 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](NavbarComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -1418,7 +1333,7 @@ NavbarComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
                 templateUrl: './navbar.component.html',
                 styleUrls: ['./navbar.component.scss']
             }]
-    }], function () { return [{ type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"] }]; }, null); })();
+    }], function () { return []; }, null); })();
 
 
 /***/ }),
@@ -1434,18 +1349,14 @@ NavbarComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineCo
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomepageComponent", function() { return HomepageComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-
 
 
 class HomepageComponent {
-    constructor(auth) {
-        this.auth = auth;
-    }
+    constructor() { }
     ngOnInit() {
     }
 }
-HomepageComponent.ɵfac = function HomepageComponent_Factory(t) { return new (t || HomepageComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"])); };
+HomepageComponent.ɵfac = function HomepageComponent_Factory(t) { return new (t || HomepageComponent)(); };
 HomepageComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: HomepageComponent, selectors: [["app-homepage"]], decls: 8, vars: 0, consts: [[1, "opener", "container", "d-flex"], [1, "align-self-center"], [1, "display-1"], [1, "text-success"], [1, "text-muted"]], template: function HomepageComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 1);
@@ -1468,7 +1379,7 @@ HomepageComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
                 templateUrl: './homepage.component.html',
                 styleUrls: ['./homepage.component.scss']
             }]
-    }], function () { return [{ type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_1__["AuthService"] }]; }, null); })();
+    }], function () { return []; }, null); })();
 
 
 /***/ }),
@@ -1487,9 +1398,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
 /* harmony import */ var src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/transaction.service */ "FkVd");
 /* harmony import */ var src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/budget.service */ "QKEp");
-/* harmony import */ var _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @auth0/auth0-angular */ "2beD");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "ofXK");
-
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
 
 
 
@@ -1531,11 +1440,10 @@ function TransactionFormComponent_tr_45_Template(rf, ctx) { if (rf & 1) {
 } }
 // TODO: Add sorting for table and options
 class TransactionFormComponent {
-    constructor(formBuilder, transactionService, budgetService, auth) {
+    constructor(formBuilder, transactionService, budgetService) {
         this.formBuilder = formBuilder;
         this.transactionService = transactionService;
         this.budgetService = budgetService;
-        this.auth = auth;
     }
     ngOnInit() {
         this.transactionForm = this.formBuilder.group({
@@ -1543,13 +1451,11 @@ class TransactionFormComponent {
             transactionAmount: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
             transactionCategory: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
         });
-        this.auth.user$.subscribe(user => {
-            this.userEmail = user.email;
-            this.getCategories(user.email).subscribe(budget => {
-                this.knownCategories = budget.budgetCategories;
-            });
-            this.getTransactions(user.email);
+        this.userEmail = 'mrayson5129@gmail.com';
+        this.getCategories(this.userEmail).subscribe(budget => {
+            this.knownCategories = budget.budgetCategories;
         });
+        this.getTransactions(this.userEmail);
     }
     transactionSubmit() {
         let transaction = {
@@ -1579,7 +1485,7 @@ class TransactionFormComponent {
         });
     }
 }
-TransactionFormComponent.ɵfac = function TransactionFormComponent_Factory(t) { return new (t || TransactionFormComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_4__["AuthService"])); };
+TransactionFormComponent.ɵfac = function TransactionFormComponent_Factory(t) { return new (t || TransactionFormComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"])); };
 TransactionFormComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: TransactionFormComponent, selectors: [["app-transaction-form"]], decls: 46, vars: 3, consts: [[1, "card", "shadow"], [1, "card-header"], [1, "text-success"], [1, "card-body"], [3, "formGroup", "ngSubmit"], [1, "form-row"], [1, "col-sm-12", "col-md-4"], [1, "form-group"], ["type", "date", "formControlName", "transactionDate", 1, "form-control"], ["type", "number", "formControlName", "transactionAmount", 1, "form-control"], ["formControlName", "transactionCategory", 1, "form-control"], ["value", ""], [4, "ngFor", "ngForOf"], ["type", "submit", 1, "btn", "btn-success"], [1, "my-3"], [1, "table", "table-striped", "table-bordered"], [1, "align-middle"]], template: function TransactionFormComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 1);
@@ -1665,7 +1571,7 @@ TransactionFormComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵ�
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.knownCategories);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](20);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.pastTransactions);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_x"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_5__["DatePipe"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["CurrencyPipe"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvdHJhbnNhY3Rpb24tZm9ybS90cmFuc2FjdGlvbi1mb3JtLmNvbXBvbmVudC5zY3NzIn0= */"] });
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NumberValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["SelectControlValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_x"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgForOf"]], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["DatePipe"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["CurrencyPipe"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvdHJhbnNhY3Rpb24tZm9ybS90cmFuc2FjdGlvbi1mb3JtLmNvbXBvbmVudC5zY3NzIn0= */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](TransactionFormComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -1673,7 +1579,7 @@ TransactionFormComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵ�
                 templateUrl: './transaction-form.component.html',
                 styleUrls: ['./transaction-form.component.scss']
             }]
-    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"] }, { type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"] }, { type: _auth0_auth0_angular__WEBPACK_IMPORTED_MODULE_4__["AuthService"] }]; }, null); })();
+    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: src_app_services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"] }, { type: src_app_services_budget_service__WEBPACK_IMPORTED_MODULE_3__["BudgetService"] }]; }, null); })();
 
 
 /***/ }),
@@ -1694,8 +1600,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "Lquv");
 /* harmony import */ var _components_homepage_homepage_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/homepage/homepage.component */ "kHmC");
 /* harmony import */ var _components_transaction_form_transaction_form_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/transaction-form/transaction-form.component */ "vDzH");
-/* harmony import */ var _guards_auth_guard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./guards/auth.guard */ "UTcu");
-
 
 
 
@@ -1706,9 +1610,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [
     { path: 'homepage', component: _components_homepage_homepage_component__WEBPACK_IMPORTED_MODULE_4__["HomepageComponent"] },
-    { path: 'budgetcreation', component: _components_budgetcreation_budgetcreation_component__WEBPACK_IMPORTED_MODULE_2__["BudgetcreationComponent"], canActivate: [_guards_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
-    { path: 'dashboard', component: _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_3__["DashboardComponent"], canActivate: [_guards_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
-    { path: 'transaction', component: _components_transaction_form_transaction_form_component__WEBPACK_IMPORTED_MODULE_5__["TransactionFormComponent"], canActivate: [_guards_auth_guard__WEBPACK_IMPORTED_MODULE_6__["AuthGuard"]] },
+    { path: 'budgetcreation', component: _components_budgetcreation_budgetcreation_component__WEBPACK_IMPORTED_MODULE_2__["BudgetcreationComponent"] },
+    { path: 'dashboard', component: _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_3__["DashboardComponent"] },
+    { path: 'transaction', component: _components_transaction_form_transaction_form_component__WEBPACK_IMPORTED_MODULE_5__["TransactionFormComponent"] },
     { path: '', redirectTo: 'homepage', pathMatch: 'full' }
 ];
 class AppRoutingModule {

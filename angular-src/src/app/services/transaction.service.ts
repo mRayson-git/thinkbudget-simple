@@ -7,7 +7,7 @@ import { Transaction } from '../models/transaction';
   providedIn: 'root'
 })
 export class TransactionService {
-  transactionUrl="http://localhost:3000/api/transactions/";
+  transactionUrl="/api/transactions/";
   constructor(private http: HttpClient) { }
 
   saveTransaction(transaction: Transaction): Observable<Transaction>{

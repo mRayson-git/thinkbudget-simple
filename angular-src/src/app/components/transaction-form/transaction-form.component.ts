@@ -22,10 +22,9 @@ export class TransactionFormComponent implements OnInit {
 
   userEmail: string;
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private transactionService: TransactionService,
-    private budgetService: BudgetService,
-    public auth: AuthService) { }
+    private budgetService: BudgetService) { }
 
   ngOnInit(): void {
     this.transactionForm = this.formBuilder.group({
@@ -33,13 +32,11 @@ export class TransactionFormComponent implements OnInit {
       transactionAmount: ['', Validators.required],
       transactionCategory: ['', Validators.required]
     });
-    this.auth.user$.subscribe(user => {
-      this.userEmail = user.email;
-      this.getCategories(user.email).subscribe(budget => {
-        this.knownCategories = budget.budgetCategories;
-      });
-      this.getTransactions(user.email);
+    this.userEmail = 'mrayson5129@gmail.com';
+    this.getCategories(this.userEmail).subscribe(budget => {
+      this.knownCategories = budget.budgetCategories;
     });
+    this.getTransactions(this.userEmail);
   
   }
 

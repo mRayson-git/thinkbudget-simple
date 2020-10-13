@@ -4,13 +4,12 @@ import { BudgetcreationComponent } from './components/budgetcreation/budgetcreat
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
-import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'homepage', component: HomepageComponent },
-  { path: 'budgetcreation', component: BudgetcreationComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'transaction', component: TransactionFormComponent, canActivate: [AuthGuard] },
+  { path: 'budgetcreation', component: BudgetcreationComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'transaction', component: TransactionFormComponent },
   { path: '', redirectTo: 'homepage', pathMatch: 'full' }
 ];
 

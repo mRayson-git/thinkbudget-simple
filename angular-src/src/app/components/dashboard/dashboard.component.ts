@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit {
   userEmail: string;
   today: Date;
   constructor(
-    public auth: AuthService,
     private budgetService: BudgetService,
     private transactionService: TransactionService
   ) { }
@@ -34,16 +33,14 @@ export class DashboardComponent implements OnInit {
     this.today = new Date();
     let timeframe = this.today.toISOString().slice(0,7);
     this.activity = [];
-    this.auth.user$.subscribe(user => {
-      this.userEmail = user.email;
-      this.budgetService.getBudgetByName(user.email).subscribe(budget => {
-        this.budget = budget;
-        this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
-          this.transactions = transactions;
-          this.getActivity();
-          console.log(this.activity);
-          this.createPieChart();
-        });
+    this.userEmail = 'mrayson5129@gmail.com';
+    this.budgetService.getBudgetByName(this.userEmail).subscribe(budget => {
+      this.budget = budget;
+      this.transactionService.getTransactionsInTimeframe(this.userEmail, timeframe).subscribe(transactions => {
+        this.transactions = transactions;
+        this.getActivity();
+        console.log(this.activity);
+        this.createPieChart();
       });
     });
   }
@@ -126,7 +123,7 @@ export class DashboardComponent implements OnInit {
 
 
     var myChart = new Chart("categoryOverviewChart", {
-      type: 'pie',
+      type: 'doughnut',
       data: {
           labels: labels,
           datasets: [{
